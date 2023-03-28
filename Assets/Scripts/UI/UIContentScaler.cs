@@ -32,22 +32,22 @@ namespace FairyGUI
         /// <summary>
         /// 
         /// </summary>
-        public ScaleMode scaleMode;
+        public ScaleMode scaleMode = ScaleMode.ScaleWithScreenSize;
 
         /// <summary>
         /// 
         /// </summary>
-        public ScreenMatchMode screenMatchMode;
+        public ScreenMatchMode screenMatchMode = ScreenMatchMode.MatchWidthOrHeight;
 
         /// <summary>
         /// 
         /// </summary>
-        public int designResolutionX;
+        public int designResolutionX = 1280;
 
         /// <summary>
         /// 
         /// </summary>
-        public int designResolutionY;
+        public int designResolutionY = 720;
 
         /// <summary>
         /// 

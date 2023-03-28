@@ -135,19 +135,21 @@ namespace FairyGUI
         {
             screenWidth = 0; //force OnScreenSizeChanged called in next update
         }
-
+        static Camera cacheMainCamera = null;
         /// <summary>
         /// Check if there is a stage camera in the scene. If none, create one.
         /// </summary>
         public static void CheckMainCamera()
         {
+            if (cacheMainCamera == null)
+                cacheMainCamera = Camera.main;
             if (GameObject.Find(Name) == null)
             {
                 int layer = LayerMask.NameToLayer(LayerName);
                 CreateCamera(Name, 1 << layer);
             }
 
-            HitTestContext.cachedMainCamera = Camera.main;
+            HitTestContext.cachedMainCamera = cacheMainCamera;
         }
 
         /// <summary>

@@ -39,7 +39,6 @@ namespace FairyGUI
             target.name = this.name;
             target.alpha = this.alpha;
             target.rotation = this.rotation;
-            target.visible = this.visible;
             target.touchable = this.touchable;
             target.grayed = this.grayed;
             target.SetXY(this.x, this.y);
@@ -48,6 +47,7 @@ namespace FairyGUI
             int index = parent.GetChildIndex(this);
             parent.AddChildAt(target, index);
             target.relations.CopyFrom(this.relations);
+            target.visible = this.visible;
 
             parent.RemoveChild(this, true);
         }

@@ -1305,17 +1305,17 @@ namespace FairyGUI
                         Debug.LogWarning("FairyGUI: settings for '" + item.file + "' is wrong! Correct values are: (Generate Mip Maps=unchecked)");
                 }
 
-                if (tex != null)
-                {
-                    fileName = fileName + "!a";
-                    if (_fromBundle)
-                    {
-                        if (_resBundle != null)
-                            alphaTex = _resBundle.LoadAsset<Texture2D>(fileName);
-                    }
-                    else
-                        alphaTex = (Texture2D)_loadFunc(fileName, ext, typeof(Texture2D), out dm);
-                }
+                //if (tex != null)
+                //{
+                //    fileName = fileName + "!a";
+                //    if (_fromBundle)
+                //    {
+                //        if (_resBundle != null)
+                //            alphaTex = _resBundle.LoadAsset<Texture2D>(fileName);
+                //    }
+                //    else
+                //        alphaTex = (Texture2D)_loadFunc(fileName, ext, typeof(Texture2D), out dm);
+                //}
 
                 if (tex == null)
                 {

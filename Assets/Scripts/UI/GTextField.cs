@@ -446,7 +446,7 @@ namespace FairyGUI
                 if (!string.IsNullOrEmpty(txtKey))
                 {
                     txtKey = txtKey.Trim();
-                    this.title = txtKey;
+                    this.text = txtKey;
                 }
             }
         }

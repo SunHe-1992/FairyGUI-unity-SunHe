@@ -90,10 +90,14 @@ namespace FairyGUI
             Init();
         }
 
+        Camera stageCamera = null;
+        Camera mainCamera = null;
         void Init()
         {
             _children = new List<DisplayObject>();
             touchChildren = true;
+            stageCamera = StageCamera.main;
+            mainCamera = Camera.main;
         }
 
         /// <summary>
@@ -475,8 +479,13 @@ namespace FairyGUI
         /// <returns></returns>
         public Camera GetRenderCamera()
         {
+            if (stageCamera == null)
+            {
+                stageCamera = StageCamera.main;
+                mainCamera = Camera.main;
+            }
             if (renderMode == RenderMode.ScreenSpaceOverlay)
-                return StageCamera.main;
+                return stageCamera;
             else
             {
                 Camera cam = this.renderCamera;
@@ -486,9 +495,9 @@ namespace FairyGUI
                         cam = HitTestContext.cachedMainCamera;
                     else
                     {
-                        cam = Camera.main;
+                        cam = mainCamera;
                         if (cam == null)
-                            cam = StageCamera.main;
+                            cam = stageCamera;
                     }
                 }
                 return cam;
@@ -504,7 +513,12 @@ namespace FairyGUI
         /// <returns></returns>
         public DisplayObject HitTest(Vector2 stagePoint, bool forTouch)
         {
-            if (StageCamera.main == null)
+            if (stageCamera == null)
+            {
+                stageCamera = StageCamera.main;
+                mainCamera = Camera.main;
+            }
+            if (stageCamera == null)
             {
                 if (this is Stage)
                     return this;
@@ -519,10 +533,10 @@ namespace FairyGUI
                 if (p != Vector3.zero)
                     HitTestContext.screenPoint = p;
             }
-            HitTestContext.worldPoint = StageCamera.main.ScreenToWorldPoint(HitTestContext.screenPoint);
+            HitTestContext.worldPoint = stageCamera.ScreenToWorldPoint(HitTestContext.screenPoint);
             HitTestContext.direction = Vector3.back;
             HitTestContext.forTouch = forTouch;
-            HitTestContext.camera = StageCamera.main;
+            HitTestContext.camera = stageCamera;
 
             DisplayObject ret = HitTest();
             if (ret != null)

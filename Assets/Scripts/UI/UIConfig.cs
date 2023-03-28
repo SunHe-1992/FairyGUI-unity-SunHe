@@ -143,7 +143,7 @@ namespace FairyGUI
         /// <summary>
         /// When click the window, brings to front automatically.
         /// </summary>
-        public static bool bringWindowToFrontOnClick = true;
+        public static bool bringWindowToFrontOnClick = false;
 
         /// <summary>
         /// 

@@ -51,7 +51,12 @@ namespace FairyGUI
             set
             {
                 if (_titleObject != null)
-                    _titleObject.text = value;
+                {
+                    if (TranslationHelper.translateStr != null)
+                        _titleObject.text = TranslationHelper.translateStr(value);
+                    else
+                        _titleObject.text = value;
+                }
                 UpdateGear(6);
             }
         }
@@ -229,6 +234,15 @@ namespace FairyGUI
                 }
                 else
                     buffer.Skip(4);
+            }
+            if (this.data != null)
+            {
+                string txtKey = (string)this.data;
+                if (!string.IsNullOrEmpty(txtKey))
+                {
+                    txtKey = txtKey.Trim();
+                    this.title = txtKey;
+                }
             }
         }
     }

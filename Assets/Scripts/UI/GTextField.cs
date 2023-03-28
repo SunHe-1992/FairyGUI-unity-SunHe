@@ -54,7 +54,12 @@ namespace FairyGUI
             {
                 if (value == null)
                     value = string.Empty;
-                _text = value;
+
+                if (TranslationHelper.translateStr != null)
+                    _text = TranslationHelper.translateStr(value.Trim());
+                else
+                    _text = value.Trim();
+                
                 SetTextFieldText();
                 UpdateSize();
                 UpdateGear(6);
@@ -130,6 +135,8 @@ namespace FairyGUI
             string tag;
             string value;
             StringBuilder buffer = new StringBuilder();
+            if(string.IsNullOrEmpty(template))
+                return buffer.ToString();
 
             while ((pos2 = template.IndexOf('{', pos1)) != -1)
             {
@@ -433,6 +440,15 @@ namespace FairyGUI
             string str = buffer.ReadS();
             if (str != null)
                 this.text = str;
+            if (this.data != null)
+            {
+                string txtKey = (string)this.data;
+                if (!string.IsNullOrEmpty(txtKey))
+                {
+                    txtKey = txtKey.Trim();
+                    this.title = txtKey;
+                }
+            }
         }
     }
 }

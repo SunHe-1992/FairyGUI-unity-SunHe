@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using FairyGUI.Utils;
 
 namespace FairyGUI
@@ -249,5 +250,11 @@ namespace FairyGUI
                 buffer.position = curPos + dataLen;
             }
         }
+
+        public delegate string TranslateDel(string textKey);
+        /// <summary>
+        /// 多语言翻译委托
+        /// </summary>
+        public static TranslateDel translateStr;
     }
 }

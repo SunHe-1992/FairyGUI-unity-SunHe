@@ -28,7 +28,9 @@ namespace FairyGUI
         {
             public Renderer renderer;
             public Material[] materials;
+            public SpriteMask spriteMask;
             public int sortingOrder;
+            public bool frontOrback;
         }
 
         protected static List<Transform> helperTransformList = new List<Transform>();
@@ -134,33 +136,56 @@ namespace FairyGUI
             _renderers.Clear();
 
             Renderer[] items = _wrapTarget.GetComponentsInChildren<Renderer>(true);
-
+            SpriteMask[] masks_ = _wrapTarget.GetComponentsInChildren<SpriteMask>(true);
             int cnt = items.Length;
-            _renderers.Capacity = cnt;
+            int cnt_mask = masks_.Length;
+            _renderers.Capacity = cnt + cnt_mask * 2;
+
             for (int i = 0; i < cnt; i++)
             {
                 Renderer r = items[i];
-                Material[] mats = r.sharedMaterials;
+                List<Material> materials = new List<Material>();
+                r.GetSharedMaterials(materials);
+
                 RendererInfo ri = new RendererInfo()
                 {
                     renderer = r,
-                    materials = mats,
+                    materials = materials.ToArray(),
                     sortingOrder = r.sortingOrder
                 };
                 _renderers.Add(ri);
 
-                if (!_cloneMaterial && mats != null
+                if (!_cloneMaterial && materials != null
                     && ((r is SkinnedMeshRenderer) || (r is MeshRenderer)))
                 {
-                    int mcnt = mats.Length;
+                    int mcnt = materials.Count;
                     for (int j = 0; j < mcnt; j++)
                     {
-                        Material mat = mats[j];
+                        Material mat = materials[j];
                         if (mat != null && mat.renderQueue != 3000) //Set the object rendering in Transparent Queue as UI objects
                             mat.renderQueue = 3000;
                     }
                 }
             }
+            for (int i = 0; i < cnt_mask; i++)
+            {
+                SpriteMask r = masks_[i];
+                RendererInfo ri = new RendererInfo()
+                {
+                    spriteMask = r,
+                    sortingOrder = r.frontSortingOrder,
+                    frontOrback = true
+                };
+                _renderers.Add(ri);
+                RendererInfo ri_back = new RendererInfo()
+                {
+                    spriteMask = r,
+                    sortingOrder = r.backSortingOrder,
+                    frontOrback = false
+                };
+                _renderers.Add(ri_back);
+            }
+
             _renderers.Sort((RendererInfo c1, RendererInfo c2) =>
             {
                 return c1.sortingOrder - c2.sortingOrder;
@@ -273,6 +298,19 @@ namespace FairyGUI
                             if (i != 0 && _renderers[i].sortingOrder != _renderers[i - 1].sortingOrder)
                                 value = UpdateContext.current.renderingOrder++;
                             ri.renderer.sortingOrder = value;
+                        }
+                        else if (ri.spriteMask != null)
+                        {
+                            if (i != 0 && _renderers[i].sortingOrder != _renderers[i - 1].sortingOrder)
+                                value = UpdateContext.current.renderingOrder++;
+                            if (ri.frontOrback == true)
+                            {
+                                ri.spriteMask.frontSortingOrder = value;
+                            }
+                            else
+                            {
+                                ri.spriteMask.backSortingOrder = value;
+                            }
                         }
                     }
                 }

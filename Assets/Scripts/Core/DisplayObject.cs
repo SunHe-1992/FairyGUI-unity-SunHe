@@ -551,6 +551,7 @@ namespace FairyGUI
             Vector3 v = new Vector3();
             v.x = v.z = ValidateScale(xv);
             v.y = ValidateScale(yv);
+            if (cachedTransform == null) return;
             cachedTransform.localScale = v;
             _flags |= Flags.OutlineChanged;
             ApplyPivot();
@@ -1699,6 +1700,8 @@ namespace FairyGUI
             }
             else if (parent != null)
             {
+                if (cachedTransform == null || parent == null || parent.cachedTransform == null) return;
+                
                 cachedTransform.SetParent(parent.cachedTransform, false);
 
                 if (_visible)

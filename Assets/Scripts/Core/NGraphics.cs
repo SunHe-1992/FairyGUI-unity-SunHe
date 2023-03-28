@@ -363,7 +363,8 @@ namespace FairyGUI
         /// <param name="value"></param>
         internal void _SetStencilEraserOrder(int value)
         {
-            _stencilEraser.meshRenderer.sortingOrder = value;
+            if(_stencilEraser != null && _stencilEraser.meshRenderer != null)
+                _stencilEraser.meshRenderer.sortingOrder = value;
         }
 
         /// <summary>
@@ -782,7 +783,7 @@ namespace FairyGUI
             vb.colors.CopyTo(_colors);
             vb.triangles.CopyTo(triangles);
 
-            mesh.vertices = vertices;
+            mesh.SetVertices(vertices);
             mesh.uv = uv;
             mesh.triangles = triangles;
             mesh.colors32 = _colors;

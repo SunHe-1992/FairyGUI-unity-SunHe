@@ -47,6 +47,9 @@ namespace FairyGUI
         public Window()
             : base()
         {
+            if (displayObject == null)
+                return;
+
             _uiSources = new List<IUISource>();
             this.tabStopChildren = true;
             bringToFontOnClick = UIConfig.bringWindowToFrontOnClick;
@@ -92,6 +95,8 @@ namespace FairyGUI
                         this.SetSize(_contentPane.width, _contentPane.height);
                         _contentPane.AddRelation(this, RelationType.Size);
                         _contentPane.fairyBatching = true;
+                        this.SetPosition(0, 0, 0);
+                        _contentPane.MakeFullScreen();
                         _frame = _contentPane.GetChild("frame") as GComponent;
                         if (_frame != null)
                         {

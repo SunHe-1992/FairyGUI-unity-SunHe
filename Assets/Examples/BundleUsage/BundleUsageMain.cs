@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using UnityEngine;
 using FairyGUI;
-#if UNITY_5_4_OR_NEWER
+using System.Net;
 using UnityEngine.Networking;
-#endif
+using System;
 
 /// <summary>
 /// Demonstrated how to load UI package from assetbundle. The bundle can be build from the Window Menu->Build FairyGUI example bundles.
@@ -24,10 +24,15 @@ class BundleUsageMain : MonoBehaviour
     IEnumerator LoadUIPackage()
     {
         string url = Application.streamingAssetsPath.Replace("\\", "/") + "/fairygui-examples/bundleusage.ab";
-        if (Application.platform != RuntimePlatform.Android)
-            url = "file:///" + url;
+        if (Application.isEditor)
+        {
+            UriBuilder uri = new UriBuilder(url);
+            uri.Scheme = "file";
+            url = uri.ToString();
+        }
 
 #if UNITY_2017_2_OR_NEWER
+
 #if UNITY_2018_1_OR_NEWER
         UnityWebRequest www = UnityWebRequestAssetBundle.GetAssetBundle(url);
 #else
@@ -35,7 +40,11 @@ class BundleUsageMain : MonoBehaviour
 #endif
         yield return www.SendWebRequest();
 
+#if UNITY_2020_2_OR_NEWER
+        if (www.result == UnityWebRequest.Result.Success)
+#else
         if (!www.isNetworkError && !www.isHttpError)
+#endif
         {
             AssetBundle bundle = DownloadHandlerAssetBundle.GetContent(www);
 #else
@@ -55,14 +64,16 @@ class BundleUsageMain : MonoBehaviour
 
             _mainView = UIPackage.CreateObject("BundleUsage", "Main").asCom;
             _mainView.fairyBatching = true;
-            _mainView.SetSize(GRoot.inst.width, GRoot.inst.height);
+            _mainView.MakeFullScreen();
             _mainView.AddRelation(GRoot.inst, RelationType.Size);
 
             GRoot.inst.AddChild(_mainView);
             _mainView.GetTransition("t0").Play();
         }
         else
-            Debug.LogError(www.error);
+        {
+            Debug.LogWarning("Run Window->Build FairyGUI example Bundles first.");
+        }
     }
 
     void OnKeyDown(EventContext context)

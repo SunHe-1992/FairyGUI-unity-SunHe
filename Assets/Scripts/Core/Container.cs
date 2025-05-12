@@ -956,6 +956,7 @@ namespace FairyGUI
 
         private void CollectChildren(Container initiator, bool outlineChanged)
         {
+            EnsureSizeCorrect();
             int count = _children.Count;
             for (int i = 0; i < count; i++)
             {

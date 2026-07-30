@@ -375,6 +375,9 @@ namespace FairyGUI
             _char = TMP_FontAssetUtilities.GetCharacterFromFontAsset(unicode, _fontAsset, true, fontStyle, fontWeight,
                 out isAlternativeTypeface
             );
+            if (_char == null && fontWeight != FontWeight.Regular)
+                _char = TMP_FontAssetUtilities.GetCharacterFromFontAsset(unicode, _fontAsset, true, fontStyle,
+                    FontWeight.Regular, out isAlternativeTypeface);
             if (_char == null)
                 return false;
 
